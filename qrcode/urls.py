@@ -1,9 +1,9 @@
 from django.conf.urls import url, include
 from rest_framework import routers
-from .views import QrcodeList, QrcodeDetail
+from .views import QrcodeViewSet
 
 
-urlpatterns = [
-    url(r'^qrcodes/$', QrcodeList.as_view()),
-    url(r'^qrcodes/(?P<id>[0-9]+)/$', QrcodeDetail.as_view())
-]
+router = routers.SimpleRouter()
+router.register(r'qrcodes', QrcodeViewSet)
+
+urlpatterns = router.urls

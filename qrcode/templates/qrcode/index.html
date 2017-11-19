@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'qrcode/css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="message d-none p-3 text-center text-white bg-primary">There's a newer version of Bootstrap 4!</div>
+
+<section class="camera__background d-none">
+  <video autoplay muted></video>
+</section>
+
+<div class="container d-flex h-100">
+  <div class="row justify-content-center align-self-center" style="width: 100%; margin: 0;">
+    <div class="col align-self-center text-center">
+      <div class="square-qrcode d-none"><canvas></canvas></div>
+      <div class="clearfix"></div>
+      <button type="button" class="btn btn-outline-primary btn-lg scan__qrcode">📷 Scan QRCode</button>
+      <button type="button" class="btn btn-outline-danger btn-lg cancel__scann d-none">❌ Cancel</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js-footer %}
+<script type="text/javascript" src="{% static 'qrcode/js/qrcode.mim.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/main.js' %}"></script>
+{% endblock %}

@@ -1,8 +1,3 @@
-canvas {
-  width: 258px;
-  height: 258px;
-  display: none !important;
-}
 .camera__background {
   position: absolute;
   top: 0;

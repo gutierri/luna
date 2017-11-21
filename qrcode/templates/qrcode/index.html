@@ -3,11 +3,28 @@
 
 {% block head %}
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/grid.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/version.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/detector.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/formatinf.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/errorlevel.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/bitmat.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/datablock.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/bmparser.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/datamask.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/rsdecoder.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/gf256poly.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/gf256.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/decoder.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/qrcode.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/findpat.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/alignpat.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/databr.js' %}"></script>
+<script type="text/javascript" src="{% static 'qrcode/js/lib/photobooth_min.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'qrcode/css/style.css' %}">
 {% endblock %}
 
 {% block content %}
-
 <div class="message d-none p-3 text-center text-white bg-primary">There's a newer version of Bootstrap 4!</div>
 
 <section class="camera__background d-none">
@@ -17,7 +34,7 @@
 <div class="container d-flex h-100">
   <div class="row justify-content-center align-self-center" style="width: 100%; margin: 0;">
     <div class="col align-self-center text-center">
-      <div class="square-qrcode d-none"><canvas></canvas></div>
+      <div class="square-qrcode d-none"><canvas id="qr-canvas"></canvas></div>
       <div class="clearfix"></div>
       <button type="button" class="btn btn-outline-primary btn-lg scan__qrcode">📷 Scan QRCode</button>
       <button type="button" class="btn btn-outline-danger btn-lg cancel__scann d-none">❌ Cancel</button>

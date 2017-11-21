@@ -1,9 +1,10 @@
 let $ = (_e) => document.querySelector(_e);
 
-var video =  $('video');
-var canvas = $('canvas');
-    canvas.width = 480;
-    canvas.height = 360;
+const attemps = 10;
+let video =  $('video');
+let canvas = document.createElement('canvas');
+    canvas.width = 300;
+    canvas.height = 240;
 let button_scann_photo = $(".scan__qrcode");
 let button_cancel_scann = $(".cancel__scann");
 let line_scann = $(".square-qrcode");
@@ -45,6 +46,43 @@ let change_view = (options, callback) => {
   }
 }
 
+const limit = 10;
+let take_picture = (n_limit) => {
+  let canvas_context = canvas.getContext('2d');
+      canvas_context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  qrcode.decode(canvas.toDataURL());
+
+  let data = false;
+
+  if (!video.srcObject || n_limit == 10) {
+    let options = { to: 'take', message: 'Could not find any pattern' };
+    change_view(options, stop_scanner);
+    data = true;
+  }
+
+  return data
+}
+
+let send_code = (data) => {
+  let options = { to: 'take' };
+  axios.post('/api/v1/qrcodes/', {
+    data: data, device: navigator.oscpu
+  }).then((e) => {
+    options.message = 'Code saved!';
+    change_view(options, stop_scanner);
+  }).catch((e) => {
+    options.message = 'Server error!';
+    change_view(options, stop_scanner);
+  });
+}
+
+/* QRCODE CALLBACK */
+qrcode.callback = (data) => {
+  if (data.indexOf("error decoding") !== 0)
+      send_code(data);
+}
+
 let start_scanner = () => {
   navigator.mediaDevices.getUserMedia({
     audio: false,
@@ -53,44 +91,15 @@ let start_scanner = () => {
     video.srcObject = stream;
   })
   .then(() => {
-    const attemps = 10;
-    let cleartimeout_finish = false;
-    let count = 0;
-    /* QRCODE */
-    let _ = 4;
+    let n_limit = 0;
 
-    let take_picture = setInterval(() => {
-      let canvas_context = canvas.getContext('2d');
-      canvas_context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      count++;
-
-      if (count > attemps) {
-        let options = { to: 'take', message: 'Could not find any pattern' };
-        change_view(options, stop_scanner);
-        cleartimeout_finish = true;
-      } else {
-        /* Logica de QR CODE */
-        if (count === _) {
-          let options = { to: 'take' };
-          cleartimeout_finish = true;
-
-          axios.post('/api/v1/qrcodes/', {
-            data: 'Fake Data', device: 1
-          }).then((e) => {
-            options.message = 'Code saved!';
-            change_view(options, stop_scanner);
-          }).catch((e) => {
-            console.log(e);
-            options.message = 'Server error!';
-            change_view(options, stop_scanner);
-          });
-        }
-      }
-
+    let worker_picture = setInterval(() => {
+      let cleartimeout_finish = take_picture(n_limit);
+      n_limit++;
       if (cleartimeout_finish) {
-        clearTimeout(take_picture)
+        clearTimeout(worker_picture)
       }
-    }, 500);
+    }, 1000);
   })
   .catch((e) => {
     let options = { to: 'take', message: 'Could not find any pattern' };
